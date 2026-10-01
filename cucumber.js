@@ -3,6 +3,7 @@ module.exports = {
     paths: ['features/**/*.feature'],
     requireModule: ['ts-node/register'],
     require: ['src/support/**/*.ts', 'src/steps/**/*.ts'],
+    parallel: Number(process.env.PARALLEL ?? 4),
     format: [
       'progress-bar',
       'html:reports/cucumber-report.html',
