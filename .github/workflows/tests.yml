@@ -33,9 +33,18 @@ jobs:
         if: always()
         run: npm run report
 
+      - name: Descargar historial de Allure publicado
+        if: always()
+        run: |
+          mkdir -p allure-history
+          curl -fsSL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/history.jsonl" \
+            -o /tmp/history.jsonl && mv /tmp/history.jsonl allure-history/history.jsonl || echo "Sin historial previo"
+
       - name: Generar reporte Allure
         if: always()
-        run: npm run allure:generate
+        run: |
+          npm run allure:generate
+          cp allure-history/history.jsonl allure-report/history.jsonl || true
 
       - name: Publicar reporte y traces
         if: always()
