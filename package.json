@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "Playwright + Cucumber + POM + MCP",
   "scripts": {
+    "pretest": "node -e \"require('fs').rmSync('allure-results',{recursive:true,force:true})\"",
     "test": "cucumber-js",
     "test:headed": "cross-env HEADLESS=false cucumber-js",
     "test:login": "cucumber-js --tags @login",
     "test:smoke": "cucumber-js --tags @smoke",
     "test:productos": "cucumber-js --tags @productos",
     "test:carrito": "cucumber-js --tags @carrito",
-    "report": "node scripts/generate-report.mjs"
+    "report": "node scripts/generate-report.mjs",
+    "allure:generate": "allure generate allure-results",
+    "allure:open": "allure open allure-report"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +22,8 @@
     "@cucumber/cucumber": "^13.2.1",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.3",
+    "allure": "^3.19.1",
+    "allure-cucumberjs": "^3.13.0",
     "cross-env": "^10.1.0",
     "dotenv": "^18.0.5",
     "multiple-cucumber-html-reporter": "^4.3.0",
