@@ -1,0 +1,28 @@
+{
+  "name": "mcp",
+  "version": "1.0.0",
+  "description": "Playwright + Cucumber + POM + MCP",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:headed": "cross-env HEADLESS=false cucumber-js",
+    "test:login": "cucumber-js --tags @login",
+    "test:smoke": "cucumber-js --tags @smoke",
+    "test:productos": "cucumber-js --tags @productos",
+    "test:carrito": "cucumber-js --tags @carrito",
+    "report": "node scripts/generate-report.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.2.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "cross-env": "^10.1.0",
+    "dotenv": "^18.0.5",
+    "multiple-cucumber-html-reporter": "^4.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
