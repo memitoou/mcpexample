@@ -1,13 +1,20 @@
 import { After, Before, setDefaultTimeout, Status } from '@cucumber/cucumber';
-import { chromium } from '@playwright/test';
+import { chromium, firefox, webkit } from '@playwright/test';
+// Registra el runtime de Allure para poder usar la API de allure-js-commons
+import 'allure-cucumberjs';
+import * as allure from 'allure-js-commons';
 import path from 'path';
 import { config } from '../config/config';
 import { CustomWorld } from './world';
 
 setDefaultTimeout(config.defaultTimeout);
 
+const browserTypes = { chromium, firefox, webkit };
+
 Before(async function (this: CustomWorld) {
-  this.browser = await chromium.launch({ headless: config.headless });
+  // Distingue el mismo escenario ejecutado en distintos navegadores dentro de Allure
+  await allure.parameter('Navegador', config.browser);
+  this.browser = await browserTypes[config.browser].launch({ headless: config.headless });
   this.context = await this.browser.newContext();
   // Los anuncios de Google pueden tapar elementos o redirigir la página
   await this.context.route(/googlesyndication|doubleclick|googleadservices|adservice\.google|fundingchoices/, (route) =>
@@ -24,7 +31,7 @@ After(async function (this: CustomWorld, { result, pickle }) {
     this.attach(screenshot, 'image/png');
 
     const safeName = pickle.name.replace(/[^a-z0-9]+/gi, '_');
-    const tracePath = path.join('test-results', 'traces', `${safeName}_${Date.now()}.zip`);
+    const tracePath = path.join('test-results', 'traces', `${config.browser}_${safeName}_${Date.now()}.zip`);
     await this.context.tracing.stop({ path: tracePath });
     this.attach(`Trace: npx playwright show-trace ${tracePath}`, 'text/plain');
   } else {

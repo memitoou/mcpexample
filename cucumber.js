@@ -13,7 +13,7 @@ module.exports = {
     formatOptions: {
       resultsDir: 'allure-results',
       environmentInfo: {
-        Navegador: 'Chromium',
+        Navegador: process.env.BROWSER ?? 'chromium',
         URL: process.env.BASE_URL ?? 'https://automationexercise.com',
         SO: process.platform,
         Node: process.version,
