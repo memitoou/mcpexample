@@ -10,6 +10,7 @@
     "test:smoke": "cucumber-js --tags @smoke",
     "test:productos": "cucumber-js --tags @productos",
     "test:carrito": "cucumber-js --tags @carrito",
+    "test:registro": "cucumber-js --tags @registro",
     "report": "node scripts/generate-report.mjs",
     "allure:generate": "allure generate allure-results",
     "allure:open": "allure open allure-report"

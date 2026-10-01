@@ -7,6 +7,10 @@ export class LoginPage extends BasePage {
   private readonly loginButton: Locator;
   readonly loginTitle: Locator;
   readonly errorMessage: Locator;
+  private readonly signupNameInput: Locator;
+  private readonly signupEmailInput: Locator;
+  private readonly signupButton: Locator;
+  readonly emailExistsMessage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -15,6 +19,10 @@ export class LoginPage extends BasePage {
     this.loginButton = page.locator('[data-qa="login-button"]');
     this.loginTitle = page.getByRole('heading', { name: 'Login to your account' });
     this.errorMessage = page.getByText('Your email or password is incorrect!');
+    this.signupNameInput = page.locator('[data-qa="signup-name"]');
+    this.signupEmailInput = page.locator('[data-qa="signup-email"]');
+    this.signupButton = page.locator('[data-qa="signup-button"]');
+    this.emailExistsMessage = page.getByText('Email Address already exist!');
   }
 
   async open(): Promise<void> {
@@ -37,5 +45,11 @@ export class LoginPage extends BasePage {
     await this.enterEmail(email);
     await this.enterPassword(password);
     await this.clickLogin();
+  }
+
+  async startSignup(name: string, email: string): Promise<void> {
+    await this.fill(this.signupNameInput, name);
+    await this.fill(this.signupEmailInput, email);
+    await this.click(this.signupButton);
   }
 }

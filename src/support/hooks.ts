@@ -30,6 +30,14 @@ After(async function (this: CustomWorld, { result, pickle }) {
   } else {
     await this.context?.tracing.stop();
   }
+
+  if (this.currentUser && !this.userDeleted) {
+    const { email, password } = this.currentUser;
+    await this.accountApi
+      .deleteAccount(email, password)
+      .catch((error: Error) => this.attach(`No se pudo limpiar ${email}: ${error.message}`, 'text/plain'));
+  }
+
   await this.page?.close();
   await this.context?.close();
   await this.browser?.close();

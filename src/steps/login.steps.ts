@@ -1,6 +1,5 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import { config } from '../config/config';
 import { CustomWorld } from '../support/world';
 
 Given('que el usuario está en la página de login', async function (this: CustomWorld) {
@@ -16,23 +15,15 @@ When('ingresa la contraseña {string}', async function (this: CustomWorld, passw
   await this.loginPage.enterPassword(password);
 });
 
-function getValidUser() {
-  const { email, password } = config.validUser;
-  if (!email || !password) {
-    throw new Error('Faltan LOGIN_EMAIL o LOGIN_PASSWORD en el archivo .env');
-  }
-  return { email, password };
-}
-
-Given('que el usuario inició sesión con el usuario válido', async function (this: CustomWorld) {
-  const { email, password } = getValidUser();
+Given('que el usuario inició sesión con un usuario registrado', async function (this: CustomWorld) {
+  const { email, password, name } = this.requireUser();
   await this.loginPage.open();
   await this.loginPage.login(email, password);
-  await expect(this.homePage.loggedInAs).toContainText(config.validUser.name);
+  await expect(this.homePage.loggedInAs).toContainText(name);
 });
 
-When('ingresa las credenciales del usuario válido', async function (this: CustomWorld) {
-  const { email, password } = getValidUser();
+When('ingresa las credenciales del usuario registrado', async function (this: CustomWorld) {
+  const { email, password } = this.requireUser();
   await this.loginPage.enterEmail(email);
   await this.loginPage.enterPassword(password);
 });
@@ -46,5 +37,5 @@ Then('debería ver el mensaje de credenciales incorrectas', async function (this
 });
 
 Then('debería ver que inició sesión correctamente', async function (this: CustomWorld) {
-  await expect(this.homePage.loggedInAs).toContainText(config.validUser.name);
+  await expect(this.homePage.loggedInAs).toContainText(this.requireUser().name);
 });
